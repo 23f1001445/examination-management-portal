@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<div class="page-header d-flex justify-content-between align-items-center">
+  <h2><i class="bi bi-speedometer2 me-2"></i>Admin Dashboard</h2>
+  <form action="{{ url_for('admin_search') }}" method="GET" class="d-flex" style="width:350px">
+    <input name="q" class="form-control me-2" placeholder="Search by name or ID..." value="{{ query|default('') }}">
+    <button class="btn btn-outline-primary"><i class="bi bi-search"></i></button>
+  </form>
+</div>
+
+{% if search_mode %}
+<!-- Search Results -->
+<h4 class="mb-3">Search results for "{{ query }}"</h4>
+{% if results.students %}
+<h5>Students ({{ results.students|length }})</h5>
+<table class="table table-hover bg-white rounded">
+  <thead><tr><th>ID</th><th>Name</th><th>Username</th><th>Email</th><th>Status</th></tr></thead>
+  <tbody>
+  {% for s in results.students %}
+  <tr><td>{{ s.id }}</td><td>{{ s.name }}</td><td>{{ s.username }}</td><td>{{ s.email }}</td><td><span class="badge bg-{{ 'success' if s.status=='active' else 'secondary' }}">{{ s.status }}</span></td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% if results.examiners %}
+<h5>Examiners ({{ results.examiners|length }})</h5>
+<table class="table table-hover bg-white rounded">
+  <thead><tr><th>ID</th><th>Name</th><th>Department</th><th>Status</th></tr></thead>
+  <tbody>
+  {% for e in results.examiners %}
+  <tr><td>{{ e.id }}</td><td>{{ e.name }}</td><td>{{ e.department }}</td><td><span class="badge bg-{{ 'success' if e.status=='active' else ('warning' if e.status=='pending' else 'secondary') }}">{{ e.status }}</span></td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% if results.exams %}
+<h5>Examinations ({{ results.exams|length }})</h5>
+<table class="table table-hover bg-white rounded">
+  <thead><tr><th>ID</th><th>Name</th><th>Course</th><th>Type</th><th>Status</th></tr></thead>
+  <tbody>
+  {% for e in results.exams %}
+  <tr><td>{{ e.id }}</td><td>{{ e.exam_name }}</td><td>{{ e.course_name }}</td><td>{{ e.exam_type }}</td><td>{{ e.status }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% if results.bookings %}
+<h5>Bookings ({{ results.bookings|length }})</h5>
+<table class="table table-hover bg-white rounded">
+  <thead><tr><th>ID</th><th>Student</th><th>Exam</th><th>Status</th></tr></thead>
+  <tbody>
+  {% for b in results.bookings %}
+  <tr><td>{{ b.id }}</td><td>{{ b.student_name }}</td><td>{{ b.exam_name }}</td><td>{{ b.status }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% if not results.students and not results.examiners and not results.exams and not results.bookings %}
+<p class="text-muted">No results found.</p>
+{% endif %}
+
+{% else %}
+<!-- Dashboard Stats -->
+<div class="row g-3 mb-4">
+  <div class="col-md-4 col-lg-3">
+    <div class="card stat-card">
+      <div class="card-body d-flex align-items-center">
+        <div class="stat-icon bg-primary bg-opacity-10 text-primary me-3"><i class="bi bi-book"></i></div>
+        <div><h3>{{ stats.courses }}</h3><p>Courses</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 col-lg-3">
+    <div class="card stat-card">
+      <div class="card-body d-flex align-items-center">
+        <div class="stat-icon bg-success bg-opacity-10 text-success me-3"><i class="bi bi-journal-check"></i></div>
+        <div><h3>{{ stats.examinations }}</h3><p>Examinations</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 col-lg-3">
+    <div class="card stat-card">
+      <div class="card-body d-flex align-items-center">
+        <div class="stat-icon bg-info bg-opacity-10 text-info me-3"><i class="bi bi-person-badge"></i></div>
+        <div><h3>{{ stats.examiners }}</h3><p>Examiners</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 col-lg-3">
+    <div class="card stat-card">
+      <div class="card-body d-flex align-items-center">
+        <div class="stat-icon bg-warning bg-opacity-10 text-warning me-3"><i class="bi bi-people"></i></div>
+        <div><h3>{{ stats.students }}</h3><p>Students</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 col-lg-3">
+    <div class="card stat-card">
+      <div class="card-body d-flex align-items-center">
+        <div class="stat-icon bg-secondary bg-opacity-10 text-secondary me-3"><i class="bi bi-calendar3"></i></div>
+        <div><h3>{{ stats.slots }}</h3><p>Exam Slots</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 col-lg-3">
+    <div class="card stat-card">
+      <div class="card-body d-flex align-items-center">
+        <div class="stat-icon bg-danger bg-opacity-10 text-danger me-3"><i class="bi bi-bookmark-check"></i></div>
+        <div><h3>{{ stats.bookings }}</h3><p>Bookings</p></div>
+      </div>
+    </div>
+  </div>
+  {% if stats.pending > 0 %}
+  <div class="col-md-4 col-lg-3">
+    <div class="card stat-card border-warning">
+      <div class="card-body d-flex align-items-center">
+        <div class="stat-icon bg-warning bg-opacity-10 text-warning me-3"><i class="bi bi-hourglass-split"></i></div>
+        <div><h3>{{ stats.pending }}</h3><p>Pending Approvals</p></div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}

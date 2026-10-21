@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<div class="page-header"><h2><i class="bi bi-person-circle me-2"></i>My Profile</h2></div>
+<div class="card" style="max-width:600px">
+  <div class="card-body">
+    <form method="POST">
+      <div class="mb-3">
+        <label class="form-label">Full Name</label>
+        <input name="name" class="form-control" required value="{{ user.name }}">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input name="email" type="email" class="form-control" required value="{{ user.email }}">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Department</label>
+        <input name="department" class="form-control" value="{{ user.department }}">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Contact</label>
+        <input name="contact" class="form-control" value="{{ user.contact }}">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input class="form-control" value="{{ user.username }}" disabled>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Role</label>
+        <input class="form-control" value="{{ user.role|capitalize }}" disabled>
+      </div>
+      <button class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>Update Profile</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

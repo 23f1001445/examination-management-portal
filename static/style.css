@@ -1,0 +1,28 @@
+:root {
+  --primary: #4e54c8;
+  --primary-light: #8f94fb;
+  --sidebar-bg: #2c2f48;
+  --sidebar-hover: #3d4166;
+}
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f4f6f9; }
+.sidebar { min-height: 100vh; background: var(--sidebar-bg); padding-top: 1rem; }
+.sidebar a { color: #c3c6d1; display: block; padding: .6rem 1.2rem; text-decoration: none; border-radius: .375rem; margin: .15rem .5rem; font-size: .9rem; }
+.sidebar a:hover, .sidebar a.active { background: var(--sidebar-hover); color: #fff; }
+.sidebar .brand { color: #fff; font-size: 1.15rem; font-weight: 700; padding: .5rem 1.2rem 1rem; border-bottom: 1px solid #3d4166; margin-bottom: .5rem; }
+.sidebar .nav-section { color: #8f94fb; font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; padding: .8rem 1.2rem .3rem; }
+.stat-card { border: none; border-radius: .75rem; transition: transform .15s; }
+.stat-card:hover { transform: translateY(-2px); }
+.stat-card .card-body { padding: 1.25rem; }
+.stat-card .stat-icon { width: 48px; height: 48px; border-radius: .5rem; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+.stat-card h3 { font-size: 1.75rem; font-weight: 700; margin: 0; }
+.stat-card p { margin: 0; color: #6c757d; font-size: .85rem; }
+.content-area { padding: 1.5rem 2rem; }
+.page-header { margin-bottom: 1.5rem; }
+.page-header h2 { font-weight: 700; color: #2c2f48; }
+.table th { font-weight: 600; font-size: .85rem; text-transform: uppercase; color: #6c757d; letter-spacing: .03em; }
+.badge-status { font-size: .78rem; padding: .35em .65em; }
+.auth-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); }
+.auth-card { background: #fff; border-radius: 1rem; padding: 2.5rem; width: 100%; max-width: 440px; box-shadow: 0 10px 40px rgba(0,0,0,.15); }
+.auth-card h2 { font-weight: 700; color: var(--primary); margin-bottom: 1.5rem; text-align: center; }
+.btn-primary { background: var(--primary); border-color: var(--primary); }
+.btn-primary:hover { background: #3d42b0; border-color: #3d42b0; }

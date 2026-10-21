@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Evaluate Student{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h2><i class="bi bi-pencil-square me-2"></i>Evaluate: {{ booking.student_name }}</h2>
+  <p class="text-muted">Examination: {{ booking.exam_name }} | Booking #{{ booking.id }}</p>
+</div>
+<div class="card" style="max-width:800px">
+  <div class="card-body">
+    {% if rubrics %}
+    <form method="POST">
+      <table class="table">
+        <thead><tr><th>Criterion</th><th>Max Marks</th><th>Weightage</th><th>Marks</th><th>Remarks</th></tr></thead>
+        <tbody>
+        {% for r in rubrics %}
+        <tr>
+          <td><strong>{{ r.criterion_name }}</strong><br><small class="text-muted">{{ r.description }}</small></td>
+          <td>{{ r.max_marks }}</td>
+          <td>{{ r.weightage }}%</td>
+          <td>
+            <input name="marks_{{ r.id }}" type="number" step="0.01" min="0" max="{{ r.max_marks }}"
+                   class="form-control" style="width:100px"
+                   value="{{ existing[r.id].marks if r.id in existing else '' }}" required>
+          </td>
+          <td>
+            <input name="remarks_{{ r.id }}" class="form-control"
+                   value="{{ existing[r.id].remarks if r.id in existing else '' }}">
+          </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <button class="btn btn-success"><i class="bi bi-check-lg me-1"></i>Submit Evaluation</button>
+      <a href="{{ url_for('examiner_slots') }}" class="btn btn-light ms-2">Cancel</a>
+    </form>
+    {% else %}
+    <div class="alert alert-warning">No rubrics defined for this examination. Ask the admin to add rubrics first.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

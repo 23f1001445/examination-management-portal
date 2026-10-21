@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Results{% endblock %}
+{% block content %}
+<div class="page-header"><h2><i class="bi bi-trophy me-2"></i>Examination Results</h2></div>
+
+{% for r in results %}
+<div class="card mb-4">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <div>
+      <strong>{{ r.booking.exam_name }}</strong>
+      <span class="text-muted ms-2">{{ r.booking.date }}</span>
+      <span class="text-muted ms-2">Examiner: {{ r.booking.examiner_name }}</span>
+    </div>
+    <div>
+      <span class="badge bg-success fs-6">Total: {{ r.total }} / {{ r.booking.max_marks }}</span>
+    </div>
+  </div>
+  <div class="card-body p-0">
+    <table class="table mb-0">
+      <thead><tr><th>Criterion</th><th>Max Marks</th><th>Weightage</th><th>Marks Obtained</th><th>Remarks</th></tr></thead>
+      <tbody>
+      {% for ev in r.evals %}
+      <tr>
+        <td>{{ ev.criterion_name }}</td>
+        <td>{{ ev.max_marks }}</td>
+        <td>{{ ev.weightage }}%</td>
+        <td><strong>{{ ev.marks }}</strong></td>
+        <td>{{ ev.remarks or '&mdash;' }}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% else %}
+<div class="text-muted text-center py-5">No results published yet.</div>
+{% endfor %}
+{% endblock %}

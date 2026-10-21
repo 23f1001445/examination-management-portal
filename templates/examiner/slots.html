@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}My Slots{% endblock %}
+{% block content %}
+<div class="page-header d-flex justify-content-between align-items-center">
+  <h2><i class="bi bi-calendar3 me-2"></i>My Examination Slots</h2>
+  <a href="{{ url_for('examiner_slot_create') }}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Create Slot</a>
+</div>
+<div class="card">
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0">
+      <thead><tr><th>ID</th><th>Examination</th><th>Date</th><th>Time</th><th>Capacity</th><th>Available</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+      {% for s in slots %}
+      <tr>
+        <td>{{ s.id }}</td>
+        <td>{{ s.exam_name }}</td>
+        <td>{{ s.date }}</td>
+        <td>{{ s.start_time }} - {{ s.end_time }}</td>
+        <td>{{ s.max_capacity }}</td>
+        <td>{{ s.available_seats }}</td>
+        <td>
+          {% set sc = {'Available':'success','Full':'warning','Cancelled':'danger','Completed':'info'} %}
+          <span class="badge bg-{{ sc.get(s.status,'secondary') }} badge-status">{{ s.status }}</span>
+        </td>
+        <td>
+          <a href="{{ url_for('examiner_booked_students', sid=s.id) }}" class="btn btn-sm btn-outline-info" title="View Students"><i class="bi bi-people"></i></a>
+          <a href="{{ url_for('examiner_slot_edit', sid=s.id) }}" class="btn btn-sm btn-outline-primary" title="Edit"><i class="bi bi-pencil"></i></a>
+          <form method="POST" action="{{ url_for('examiner_slot_delete', sid=s.id) }}" class="d-inline">
+            <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this slot?')" title="Delete"><i class="bi bi-trash"></i></button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="8" class="text-muted text-center py-4">No slots created yet.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Edit' if mode=='edit' else 'Create' }} Slot{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h2><i class="bi bi-calendar-plus me-2"></i>{{ 'Edit' if mode=='edit' else 'Create' }} Examination Slot</h2>
+</div>
+<div class="card" style="max-width:700px">
+  <div class="card-body">
+    <form method="POST" action="{{ url_for('examiner_slot_edit', sid=slot.id) if mode=='edit' else url_for('examiner_slot_create') }}">
+      {% if mode != 'edit' %}
+      <div class="mb-3">
+        <label class="form-label">Examination</label>
+        <select name="exam_id" class="form-select" required>
+          <option value="">-- Select --</option>
+          {% for e in exams %}
+          <option value="{{ e.id }}">{{ e.exam_name }} ({{ e.exam_type }})</option>
+          {% endfor %}
+        </select>
+      </div>
+      {% else %}
+      <input type="hidden" name="exam_id" value="{{ slot.exam_id }}">
+      {% endif %}
+      <div class="mb-3">
+        <label class="form-label">Date</label>
+        <input name="date" type="date" class="form-control" required value="{{ slot.date if mode=='edit' else '' }}">
+      </div>
+      <div class="row g-3 mb-3">
+        <div class="col">
+          <label class="form-label">Start Time</label>
+          <input name="start_time" type="time" class="form-control" required value="{{ slot.start_time if mode=='edit' else '' }}">
+        </div>
+        <div class="col">
+          <label class="form-label">End Time</label>
+          <input name="end_time" type="time" class="form-control" required value="{{ slot.end_time if mode=='edit' else '' }}">
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Max Student Capacity</label>
+        <input name="max_capacity" type="number" min="1" class="form-control" required value="{{ slot.max_capacity if mode=='edit' else '1' }}">
+      </div>
+      <button class="btn btn-primary">{{ 'Update' if mode=='edit' else 'Create' }} Slot</button>
+      <a href="{{ url_for('examiner_slots') }}" class="btn btn-light ms-2">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

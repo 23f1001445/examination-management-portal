@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}All Slots{% endblock %}
+{% block content %}
+<div class="page-header"><h2><i class="bi bi-calendar3 me-2"></i>All Examination Slots</h2></div>
+<div class="card">
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0">
+      <thead><tr><th>ID</th><th>Examination</th><th>Examiner</th><th>Date</th><th>Time</th><th>Capacity</th><th>Available</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+      {% for s in slots %}
+      <tr>
+        <td>{{ s.id }}</td>
+        <td>{{ s.exam_name }}</td>
+        <td>{{ s.examiner_name }}</td>
+        <td>{{ s.date }}</td>
+        <td>{{ s.start_time }} - {{ s.end_time }}</td>
+        <td>{{ s.max_capacity }}</td>
+        <td>{{ s.available_seats }}</td>
+        <td>
+          {% set sc = {'Available':'success','Full':'warning','Cancelled':'danger','Completed':'info'} %}
+          <span class="badge bg-{{ sc.get(s.status,'secondary') }} badge-status">{{ s.status }}</span>
+        </td>
+        <td>
+          <form method="POST" action="{{ url_for('admin_change_examiner', sid=s.id) }}" class="d-flex align-items-center" style="gap:.25rem">
+            <select name="examiner_id" class="form-select form-select-sm" style="width:auto">
+              {% for ex in examiners %}
+              <option value="{{ ex.id }}" {{ 'selected' if ex.id==s.examiner_id }}>{{ ex.name }}</option>
+              {% endfor %}
+            </select>
+            <button class="btn btn-sm btn-outline-primary" title="Change Examiner"><i class="bi bi-arrow-repeat"></i></button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="9" class="text-muted text-center py-4">No slots created yet.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Rubrics{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h2><i class="bi bi-list-check me-2"></i>Rubrics &mdash; {{ exam.exam_name }}</h2>
+  <a href="{{ url_for('admin_examinations') }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back</a>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header fw-semibold">Add Rubric Criterion</div>
+  <div class="card-body">
+    <form method="POST" action="{{ url_for('admin_rubric_create', eid=exam.id) }}">
+      <div class="row g-3">
+        <div class="col-md-3">
+          <label class="form-label">Criterion Name</label>
+          <input name="criterion_name" class="form-control" required>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Max Marks</label>
+          <input name="max_marks" type="number" step="0.01" class="form-control" required>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Weightage (%)</label>
+          <input name="weightage" type="number" step="0.01" class="form-control" required>
+        </div>
+        <div class="col-md-5">
+          <label class="form-label">Description</label>
+          <input name="description" class="form-control">
+        </div>
+      </div>
+      <button class="btn btn-primary mt-3">Add Criterion</button>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0">
+      <thead><tr><th>ID</th><th>Criterion</th><th>Max Marks</th><th>Weightage</th><th>Description</th><th>Action</th></tr></thead>
+      <tbody>
+      {% for r in rubrics %}
+      <tr>
+        <td>{{ r.id }}</td>
+        <td><strong>{{ r.criterion_name }}</strong></td>
+        <td>{{ r.max_marks }}</td>
+        <td>{{ r.weightage }}%</td>
+        <td>{{ r.description }}</td>
+        <td>
+          <form method="POST" action="{{ url_for('admin_rubric_delete', rid=r.id) }}" class="d-inline">
+            <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Remove?')"><i class="bi bi-trash"></i></button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="6" class="text-muted text-center py-4">No rubrics defined yet.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

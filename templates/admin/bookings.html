@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}All Bookings{% endblock %}
+{% block content %}
+<div class="page-header"><h2><i class="bi bi-bookmark-check me-2"></i>All Bookings</h2></div>
+<div class="card">
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0">
+      <thead><tr><th>ID</th><th>Student</th><th>Examination</th><th>Examiner</th><th>Date</th><th>Time</th><th>Status</th><th>Reschedule</th></tr></thead>
+      <tbody>
+      {% for b in bookings %}
+      <tr>
+        <td>{{ b.id }}</td>
+        <td>{{ b.student_name }} ({{ b.username }})</td>
+        <td>{{ b.exam_name }}</td>
+        <td>{{ b.examiner_name }}</td>
+        <td>{{ b.date }}</td>
+        <td>{{ b.start_time }} - {{ b.end_time }}</td>
+        <td>
+          {% set bc = {'Booked':'primary','Cancelled':'danger','Completed':'success'} %}
+          <span class="badge bg-{{ bc.get(b.status,'secondary') }} badge-status">{{ b.status }}</span>
+        </td>
+        <td>
+          {% if b.status == 'Booked' %}
+          <form method="POST" action="{{ url_for('admin_reschedule', bid=b.id) }}" class="d-flex align-items-center" style="gap:.25rem">
+            <select name="new_slot_id" class="form-select form-select-sm" style="width:auto">
+              {% for s in slots %}
+              <option value="{{ s.id }}">{{ s.exam_name }} | {{ s.date }} {{ s.start_time }} ({{ s.examiner_name }}, {{ s.available_seats }} left)</option>
+              {% endfor %}
+            </select>
+            <button class="btn btn-sm btn-outline-warning" title="Reschedule"><i class="bi bi-calendar2-event"></i></button>
+          </form>
+          {% else %}
+          &mdash;
+          {% endif %}
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="8" class="text-muted text-center py-4">No bookings yet.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Booked Students{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h2><i class="bi bi-people me-2"></i>Booked Students &mdash; {{ slot.exam_name }}</h2>
+  <p class="text-muted">Slot #{{ slot.id }} | {{ slot.date }} {{ slot.start_time }}-{{ slot.end_time }}</p>
+  <a href="{{ url_for('examiner_slots') }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back to Slots</a>
+</div>
+<div class="card">
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0">
+      <thead><tr><th>Booking ID</th><th>Student Name</th><th>Username</th><th>Email</th><th>Status</th><th>Evaluate</th></tr></thead>
+      <tbody>
+      {% for b in bookings %}
+      <tr>
+        <td>{{ b.id }}</td>
+        <td><strong>{{ b.student_name }}</strong></td>
+        <td>{{ b.username }}</td>
+        <td>{{ b.email }}</td>
+        <td><span class="badge bg-{{ 'primary' if b.status=='Booked' else 'success' }} badge-status">{{ b.status }}</span></td>
+        <td>
+          <a href="{{ url_for('examiner_evaluate', bid=b.id) }}" class="btn btn-sm btn-outline-success"><i class="bi bi-pencil-square me-1"></i>Evaluate</a>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="6" class="text-muted text-center py-4">No students booked.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
